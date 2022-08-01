@@ -13,6 +13,8 @@ export default {
     ...mapGetters([
       'name'
     ])
+  },
+  created () {
   }
 }
 </script>
@@ -26,5 +28,9 @@ export default {
     font-size: 30px;
     line-height: 46px;
   }
+}
+
+.dashboard-container {
+  padding-top: 60px;
 }
 </style>

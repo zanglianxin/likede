@@ -1,138 +1,77 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
-    <breadcrumb class="breadcrumb-container" />
-
+    <div class="logo">
+      <img src="~@/assets/images/headerlogo.png" alt="" />
+    </div>
     <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              Home
-            </el-dropdown-item>
-          </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
-            <el-dropdown-item>Github</el-dropdown-item>
-          </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>Docs</el-dropdown-item>
-          </a>
-          <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <div class="block">
+        <el-avatar :size="35" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" ></el-avatar>
+      </div>
+      <div class="welcome">欢迎您，<span>admin</span></div>
+      <span @click="loginOut" class="login-out">退出<i class="el-icon-caret-bottom"></i></span>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-
 export default {
-  components: {
-    Breadcrumb,
-    Hamburger
+  data() {
+    return {};
   },
-  computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar'
-    ])
-  },
+
+  created() {},
+
   methods: {
-    toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
-    },
-    async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    loginOut() {
+      localStorage.removeItem('TOKEN')
+      this.$router.push('/login')
     }
-  }
-}
+  },
+};
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .navbar {
-  height: 50px;
-  overflow: hidden;
-  position: relative;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  background: url("~@/assets/images/header.png") no-repeat 0 0 / cover;
+}
 
-  .hamburger-container {
-    line-height: 46px;
-    height: 100%;
-    float: left;
-    cursor: pointer;
-    transition: background .3s;
-    -webkit-tap-highlight-color:transparent;
+body:-webkit-scrollbar {
+  display: none;
+}
 
-    &:hover {
-      background: rgba(0, 0, 0, .025)
+.navbar {
+  z-index: 9999;
+  .logo {
+    width: 88px;
+    height: 35.81px;
+    img {
+      width: 100%;
     }
+    margin-top: 10px;
+    margin-left: 15px;
   }
-
-  .breadcrumb-container {
-    float: left;
-  }
-
   .right-menu {
-    float: right;
-    height: 100%;
-    line-height: 50px;
-
-    &:focus {
-      outline: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    width: 240px;
+    height: 60px;
+    align-items: center;
+    color: #fff;
+    margin-right: 24px;
+    .block {
+      margin-right: 10px;
     }
-
-    .right-menu-item {
-      display: inline-block;
-      padding: 0 8px;
-      height: 100%;
-      font-size: 18px;
-      color: #5a5e66;
-      vertical-align: text-bottom;
-
-      &.hover-effect {
-        cursor: pointer;
-        transition: background .3s;
-
-        &:hover {
-          background: rgba(0, 0, 0, .025)
-        }
-      }
+    .welcome {
+      width: 140px;
     }
-
-    .avatar-container {
-      margin-right: 30px;
-
-      .avatar-wrapper {
-        margin-top: 5px;
-        position: relative;
-
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
-
-        .el-icon-caret-bottom {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
-      }
+    .login-out {
+      cursor: pointer;
     }
   }
 }

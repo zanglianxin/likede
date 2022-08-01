@@ -1,97 +1,56 @@
-import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
-
-const getDefaultState = () => {
-  return {
-    token: getToken(),
-    name: '',
-    avatar: ''
-  }
-}
-
-const state = getDefaultState()
-
-const mutations = {
-  RESET_STATE: (state) => {
-    Object.assign(state, getDefaultState())
-  },
-  SET_TOKEN: (state, token) => {
-    state.token = token
-  },
-  SET_NAME: (state, name) => {
-    state.name = name
-  },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
-  }
-}
-
-const actions = {
-  // user login
-  login({ commit }, userInfo) {
-    const { username, password } = userInfo
-    return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
-  // get user info
-  getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
-
-        if (!data) {
-          return reject('Verification failed, please Login again.')
-        }
-
-        const { name, avatar } = data
-
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
-  // user logout
-  logout({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
-  // remove token
-  resetToken({ commit }) {
-    return new Promise(resolve => {
-      removeToken() // must remove  token  first
-      commit('RESET_STATE')
-      resolve()
-    })
-  }
-}
+import { getImageCode, login } from "@/api/user";
+import router from "@/router";
+import { Message } from "element-ui";
 
 export default {
   namespaced: true,
-  state,
-  mutations,
-  actions
-}
+  state: {
+    imgUrl: "", // 验证码图片url
+    token: JSON.parse(localStorage.getItem("TOKEN")) || "", // 登录密钥
+  },
+  mutations: {
+    // 设置图片验证码url
+    setImageCode(state, payload) {
+      state.imgUrl = payload;
+    },
 
+    // 设置token
+    setToken(state, payload) {
+      state.token = payload;
+      localStorage.setItem("TOKEN", JSON.stringify(payload));
+    },
+  },
+  actions: {
+    // 获取图片验证码
+    async getImageCode(context, payload) {
+      try {
+        const { data } = await getImageCode(payload);
+        context.commit("setImageCode", URL.createObjectURL(data));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    // 请求登录
+    async getLogin(context, payload) {
+      try {
+        const { data } = await login(payload);
+        // console.log(data);
+        // 提交登录失败信息
+
+        if (!data.success) {
+          Message({
+            message: data.msg,
+            type: "warning",
+          });
+          return;
+        }
+        context.commit("setToken", data.token);
+        router.push("/");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  getters: {},
+};
