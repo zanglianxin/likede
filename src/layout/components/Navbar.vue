@@ -7,7 +7,7 @@
       <div class="block">
         <el-avatar :size="35" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" ></el-avatar>
       </div>
-      <div class="welcome">欢迎您，<span>admin</span></div>
+      <div class="welcome">欢迎您，<span>{{$store.state.user.userInfo.userName}}</span></div>
       <span @click="loginOut" class="login-out">退出<i class="el-icon-caret-bottom"></i></span>
     </div>
   </div>
@@ -23,7 +23,7 @@ export default {
 
   methods: {
     loginOut() {
-      localStorage.removeItem('TOKEN')
+      this.$store.state.user.token = ''
       this.$router.push('/login')
     }
   },

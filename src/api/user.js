@@ -1,4 +1,5 @@
 import request from "@/utils/request";
+import store from "@/store";
 
 /**
  * 请求图片验证码
@@ -26,4 +27,11 @@ export function login(data) {
     },
     data,
   });
+}
+
+
+export const getUserInfo = () => {
+  return request({
+    url: '/api/user-service/user/' + store.state.user.userId
+  })
 }

@@ -38,7 +38,7 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="login-btn" @click="login"
+          <el-button type="primary" :loading="isLoading" class="login-btn" @click="login"
             >登录</el-button
           >
         </el-form-item>
@@ -65,6 +65,7 @@ export default {
         code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
       },
       randomNumber: 0,
+      isLoading: false
     };
   },
 
@@ -76,7 +77,8 @@ export default {
   methods: {
     ...mapUserActions(["getImageCode", "getLogin"]),
     login() {
-      this.$refs.form.validate((vail) => {
+      this.isLoading = true
+      this.$refs.form.validate( async (vail) => {
         if (!vail) return;
         const loginData = {
           clientToken: this.randomNumber,
@@ -85,7 +87,8 @@ export default {
           loginType: 0,
           password: this.form.password,
         };
-        this.getLogin(loginData);
+        await this.getLogin(loginData);
+        this.isLoading = false
       });
     },
     clickFn() {
