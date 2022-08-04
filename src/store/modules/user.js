@@ -1,5 +1,6 @@
 import { getImageCode, getUserInfo, login } from "@/api/user";
 import router from "@/router";
+import { setTokenTime } from "@/utils/auth";
 import { Message } from "element-ui";
 
 export default {
@@ -18,8 +19,8 @@ export default {
 
     // 设置token
     setToken(state, payload) {
-      state.token = payload.token;
-      state.userId = payload.userId;
+      state.token = payload?.token;
+      state.userId = payload?.userId;
     },
 
     // 设置用户信息
@@ -53,6 +54,7 @@ export default {
           return;
         }
         context.commit("setToken", data);
+        setTokenTime()
         router.push("/");
       } catch (error) {
         console.log(error);
@@ -64,6 +66,12 @@ export default {
       const data = await getUserInfo()
       // console.log(data)
       context.commit('setUserInfo', data)
+    },
+
+    // 退出登录
+    logout(context) {
+      context.commit('setToken', '')
+      context.commit('setUserInfo', {})
     }
   },
   getters: {},
