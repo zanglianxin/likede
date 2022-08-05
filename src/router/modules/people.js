@@ -5,7 +5,7 @@ export default {
   component: Layout,
   redirect: '/people/renyuanliebiao',
   name: 'People',
-  meta: { title: '人员管理' },
+  meta: { title: '人员管理', icon: 'staff' },
   children: [
     {
       path: 'renyuanliebiao',

@@ -5,7 +5,7 @@ export default {
     component: Layout,
     redirect: '/workorder/yunying',
     name: 'Workorder',
-    meta: { title: '工单管理' },
+    meta: { title: '工单管理', icon: 'workorder' },
     children: [
       {
         path: 'yunying',

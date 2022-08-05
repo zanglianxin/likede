@@ -5,7 +5,7 @@ export default {
     component: Layout,
     redirect: '/goods/leixing',
     name: 'Goods',
-    meta: { title: '商品管理' },
+    meta: { title: '商品管理', icon: 'goods' },
     children: [
       {
         path: 'leixing',

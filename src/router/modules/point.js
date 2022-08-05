@@ -5,7 +5,7 @@ export default {
   component: Layout,
   redirect: "/point/quyu",
   name: "Point",
-  meta: { title: "点位管理" },
+  meta: { title: "点位管理", icon: 'point' },
   children: [
     {
       path: "quyu",

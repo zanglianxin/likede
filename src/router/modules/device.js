@@ -5,7 +5,7 @@ export default {
   component: Layout,
   redirect: "/device/guanli",
   name: "Device",
-  meta: { title: "设备管理" },
+  meta: { title: "设备管理", icon:'equipment' },
   children: [
     {
       path: "guanli",

@@ -8,7 +8,7 @@ export default {
       path: 'index',
       name: 'Tactics',
       component: () => import('@/views/tactics/index'),
-      meta: { title: '策略管理' }
+      meta: { title: '策略管理', icon: 'strategy' }
     }
   ]
 }

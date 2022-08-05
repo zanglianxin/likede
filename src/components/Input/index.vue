@@ -4,11 +4,15 @@
       {{ title }}
     </span>
     <el-input
-    class="input"
-      v-model="input"
+      class="input"
+      v-model="value"
       @change="enterFn"
       placeholder="请输入内容"
-    ></el-input>
+    >
+      <template slot="suffix">
+        <slot name="html" />
+      </template>
+    </el-input>
   </div>
 </template>
 
@@ -16,7 +20,7 @@
 export default {
   data() {
     return {
-      input: "",
+      value: "",
     };
   },
   props: {
@@ -24,13 +28,17 @@ export default {
       type: String,
       default: "工单编号:",
     },
+    html: {
+      type: String,
+      default: ":",
+    },
   },
 
   created() {},
 
   methods: {
     enterFn() {
-      this.$emit("enter", this.input);
+      this.$emit("enter", this.value);
     },
   },
 };
@@ -38,15 +46,15 @@ export default {
 
 <style scoped>
 .box {
-    width: 277px;
+  width: 277px;
   display: flex;
 
   align-items: center;
 }
 span {
-    flex: .3;
+  flex: 0.3;
 }
 .input {
-    flex: .7;
+  flex: 0.7;
 }
 </style>
